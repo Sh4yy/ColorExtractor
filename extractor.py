@@ -32,3 +32,23 @@ def dom_colors_hex(image_path, num_colors=5):
         hex_colors.append("#{0:02x}{0:02x}{0:02x}".format(r, g, b))
 
     return hex_colors
+
+
+def draw_palette(colors, img_path, swatchsize=100):
+    """
+    draw the color palette
+    :param colors: tuple of rgba colors
+    :param img_path: the path to the created palette
+    """
+
+    numcolors = len(colors)
+    pal = Image.new('RGB', (swatchsize * numcolors, swatchsize))
+    draw = ImageDraw.Draw(pal)
+
+    posx = 0
+    for col in colors:
+        draw.rectangle([posx, 0, posx+swatchsize, swatchsize], fill=col)
+        posx = posx + swatchsize
+
+    del draw
+    pal.save(img_path, "PNG")
