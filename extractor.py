@@ -1,4 +1,5 @@
 from PIL import Image, ImageDraw
+from time import time
 
 
 def dom_colors_rgba(image_path, num_colors=5):
@@ -9,6 +10,7 @@ def dom_colors_rgba(image_path, num_colors=5):
     :returns a list of rgba tuples
     """
     image = Image.open(image_path)
+    image = image.resize((100, 100))
     result = image.convert('P', palette=Image.ADAPTIVE, colors=num_colors)
     result.putalpha(0)
     colors = result.getcolors(256)
