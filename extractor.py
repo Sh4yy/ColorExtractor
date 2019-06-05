@@ -2,14 +2,22 @@ from PIL import Image, ImageDraw
 from time import time
 
 
-def dom_colors_rgba(image_path, num_colors=5):
+def dom_colors_rgba(img=None, image_path=None, num_colors=5):
     """
     get dominant colors of an image in rgba
+    :param img: image file
     :param image_path: path to the target image
     :param num_colors: number of colors to return
     :returns a list of rgba tuples
     """
-    image = Image.open(image_path)
+
+    if image_path:
+        image = Image.open(image_path)
+    elif img:
+        image = Image.open(img)
+    else:
+        raise Exception("missing file")
+
     image = image.resize((100, 100))
     result = image.convert('P', palette=Image.ADAPTIVE, colors=num_colors)
     result.putalpha(0)
@@ -19,14 +27,16 @@ def dom_colors_rgba(image_path, num_colors=5):
     return list(map(lambda x: x[1], colors))
 
 
-def dom_colors_hex(image_path, num_colors=5):
+def dom_colors_hex(img=None, image_path=None, num_colors=5):
     """
     get dominant colors of an image in hex
+    :param img: image file
     :param image_path: path to the target image
     :param num_colors: number of colors to return
     :returns a list of hex colors
     """
-    colors = dom_colors_rgba(image_path, num_colors)
+    colors = dom_colors_rgba(img=img, image_path=image_path,
+                             num_colors=num_colors)
     hex_colors = []
     for r, g, b, _ in colors:
         hex_colors.append("#{0:02x}{0:02x}{0:02x}".format(r, g, b))
